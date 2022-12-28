@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">ScheduleAppDB</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="subject_name">Предмет:</string>
+    <string name="teacher">Преподаватель:</string>
+    <string name="auditory">Номер аудитории:</string>
+    <string name="building">Корпус:</string>
+    <string name="time">Время начала:</string>
+    <string name="dow_title">День недели:</string>
+    <string name="week_parity">Четность недели:</string>
+    <string name="req_equip">Требуемые вещи:</string>
+    <string name="button_ok">Ок</string>
+    <string name="button_del">Удалить</string>
+    <string name="button_edit">Изменить</string>
+    <string name="subject_name_hint">Название</string>
+    <string name="teacher_name_hint">ФИО</string>
+    <string name="auditory_hint">Номер аудитории</string>
+    <string name="building_hint">Корпус</string>
+    <string name="time_hint">Время</string>
+    <string name="dow_hint">понедельник/вторник/..</string>
+    <string name="week_parity_hint">четная/нечетная</string>
+    <string name="req_equip_hint">Введите список требуемых вещей</string>
+    <string name="plus_button_description">Довавить занятие</string>
+    <string name="dow">День недели:</string>
+    <string name="plus">➕</string>
+</resources>

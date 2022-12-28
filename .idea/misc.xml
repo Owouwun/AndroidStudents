@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/ASProj/MADIStudents/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.3425" />
+        <entry key="..\:/ASProj/MADIStudents/app/src/main/res/drawable/ic_menu_gallery.xml" value="0.3425" />
+        <entry key="..\:/ASProj/MADIStudents/app/src/main/res/drawable/ic_menu_slideshow.xml" value="0.3425" />
+        <entry key="..\:/ASProj/MADIStudents/app/src/main/res/drawable/side_nav_bar.xml" value="0.3425" />
+        <entry key="..\:/ASProj/MADIStudents/app/src/main/res/layout/activity_main.xml" value="0.18802083333333333" />
+        <entry key="..\:/ASProj/MADIStudents/app/src/main/res/layout/app_bar_main.xml" value="0.18802083333333333" />
+        <entry key="..\:/ASProj/MADIStudents/app/src/main/res/layout/content_main.xml" value="0.29846014492753625" />
+        <entry key="..\:/ASProj/MADIStudents/app/src/main/res/layout/fragment_gallery.xml" value="0.18802083333333333" />
+        <entry key="..\:/ASProj/MADIStudents/app/src/main/res/layout/nav_header_main.xml" value="0.18802083333333333" />
+        <entry key="..\:/ASProj/MADIStudents/app/src/main/res/menu/activity_main_drawer.xml" value="0.18802083333333333" />
+        <entry key="..\:/ASProj/MADIStudents/app/src/main/res/menu/main.xml" value="0.18802083333333333" />
+        <entry key="..\:/ASProj/MADIStudents2/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2655" />
+        <entry key="..\:/ASProj/MADIStudents2/app/src/main/res/drawable/ic_menu_gallery.xml" value="0.2655" />
+        <entry key="..\:/ASProj/MADIStudents2/app/src/main/res/layout/activity_edit_exam.xml" value="0.33" />
+        <entry key="..\:/ASProj/MADIStudents2/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/ASProj/MADIStudents2/app/src/main/res/layout/app_bar_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/ASProj/MADIStudents2/app/src/main/res/layout/content_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/ASProj/MADIStudents2/app/src/main/res/layout/exam_details.xml" value="0.33" />
+        <entry key="..\:/ASProj/MADIStudents2/app/src/main/res/layout/recyclerview_item.xml" value="0.25" />
+        <entry key="..\:/ASProj/MADIStudents2/app/src/main/res/menu/activity_main_drawer.xml" value="0.18802083333333333" />
+        <entry key="..\:/ASProj/MADIStudents2/app/src/main/res/menu/main.xml" value="0.36102564102564105" />
+        <entry key="..\:/Users/Kayab/Desktop/MADIStudents2/app/src/main/res/layout/activity_edit_exam.xml" value="0.3625" />
+        <entry key="..\:/Users/Kayab/Desktop/MADIStudents2/app/src/main/res/layout/activity_main.xml" value="0.3625" />
+        <entry key="..\:/Users/Kayab/Desktop/MADIStudents2/app/src/main/res/layout/app_bar_main.xml" value="0.3625" />
+        <entry key="..\:/Users/Kayab/Desktop/MADIStudents2/app/src/main/res/layout/content_main.xml" value="0.3625" />
+        <entry key="..\:/Users/Kayab/Desktop/MADIStudents2/app/src/main/res/layout/exam_details.xml" value="0.3625" />
+        <entry key="..\:/Users/Kayab/Desktop/MADIStudents2/app/src/main/res/layout/recyclerview_item.xml" value="0.3625" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
