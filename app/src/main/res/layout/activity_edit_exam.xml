@@ -8,60 +8,60 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutExamNameEdit"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textViewSubjectNameTitleEdit"
-            android:layout_width="wrap_content"
+            android:id="@+id/name_textView"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:text="@string/subject_name"
+            android:text="ФИО"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/editTextSubjectName"
+            app:layout_constraintEnd_toStartOf="@id/name_editText"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/editTextSubjectName"
+            android:id="@+id/name_editText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:autofillHints=""
             android:ems="10"
             android:hint="@string/subject_name_hint"
             android:inputType="textPersonName"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/textViewSubjectNameTitleEdit"
+            app:layout_constraintStart_toEndOf="@id/name_textView"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutTeacherNameEdit"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layoutExamNameEdit">
 
         <TextView
-            android:id="@+id/textViewTeacherNameTitleEdit"
-            android:layout_width="wrap_content"
+            android:id="@+id/number_textView"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="@string/teacher"
+            android:text="Номер зачетки"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/editTextTeacherName"
+            app:layout_constraintEnd_toStartOf="@id/number_editText"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/editTextTeacherName"
-            android:layout_width="wrap_content"
+            android:id="@+id/number_editText"
+            android:layout_width="240dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:autofillHints=""
@@ -70,226 +70,360 @@
             android:inputType="textPersonName"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/textViewTeacherNameTitleEdit"
+            app:layout_constraintStart_toEndOf="@id/number_textView"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layoutAuditoryEdit"
-        android:layout_width="wrap_content"
+        android:id="@+id/exsTitle_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layoutTeacherNameEdit">
 
         <TextView
-            android:id="@+id/textViewAuditoryTitleEdit"
-            android:layout_width="wrap_content"
+            android:id="@+id/exsTitle_name_textView"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
-            android:text="@string/auditory"
+            android:text="Наименование"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/editTextAuditory"
+            app:layout_constraintEnd_toStartOf="@id/exsTitle_mark_textView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/editTextAuditory"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/exsTitle_mark_textView"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
+            android:ems="8"
+            android:text="Оценка"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/exsTitle_name_textView"
+            app:layout_constraintEnd_toEndOf="@id/exsTitle_date_textView"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/exsTitle_date_textView"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:ems="8"
+            android:text="Дата"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/exsTitle_mark_textView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ex1_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/exsTitle_layout">
+
+        <EditText
+            android:id="@+id/ex1_editText_name"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
             android:autofillHints=""
             android:ems="8"
-            android:hint="@string/auditory_hint"
+            android:hint="Наименование"
+            android:inputType="number"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ex1_editText_mark" />
+        <EditText
+            android:id="@+id/ex1_editText_mark"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:ems="8"
+            android:hint="Оценка"
+            android:inputType="number"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ex1_editText_name"
+            app:layout_constraintEnd_toStartOf="@+id/ex1_editText_date" />
+        <EditText
+            android:id="@+id/ex1_editText_date"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:ems="8"
+            android:hint="Дата"
             android:inputType="number"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/textViewAuditoryTitleEdit"
+            app:layout_constraintStart_toEndOf="@id/ex1_editText_mark"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layoutDateEdit"
-        android:layout_width="wrap_content"
+        android:id="@+id/ex2_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutAuditoryEdit">
-
-        <TextView
-            android:id="@+id/textViewBuildingTitleEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/building"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/editBuildingDate"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/ex1_layout">
 
         <EditText
-            android:id="@+id/editBuildingDate"
-            android:layout_width="wrap_content"
+            android:id="@+id/ex2_editText_name"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
             android:autofillHints=""
-            android:ems="7"
-            android:hint="@string/building_hint"
-            android:inputType="date"
+            android:ems="8"
+            android:hint="Наименование"
+            android:inputType="number"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ex2_editText_mark" />
+        <EditText
+            android:id="@+id/ex2_editText_mark"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:ems="8"
+            android:hint="Оценка"
+            android:inputType="number"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ex2_editText_name"
+            app:layout_constraintEnd_toStartOf="@+id/ex2_editText_date" />
+        <EditText
+            android:id="@+id/ex2_editText_date"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:ems="8"
+            android:hint="Дата"
+            android:inputType="number"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/textViewBuildingTitleEdit"
+            app:layout_constraintStart_toEndOf="@id/ex2_editText_mark"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layoutTimeEdit"
-        android:layout_width="wrap_content"
+        android:id="@+id/ex3_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutDateEdit">
-
-        <TextView
-            android:id="@+id/textViewTimeTitleEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/time"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/editTextTime"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/ex2_layout">
 
         <EditText
-            android:id="@+id/editTextTime"
-            android:layout_width="wrap_content"
+            android:id="@+id/ex3_editText_name"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
             android:autofillHints=""
-            android:ems="7"
-            android:hint="@string/time_hint"
-            android:inputType="time"
+            android:ems="8"
+            android:hint="Наименование"
+            android:inputType="number"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ex3_editText_mark" />
+        <EditText
+            android:id="@+id/ex3_editText_mark"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:ems="8"
+            android:hint="Оценка"
+            android:inputType="number"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ex3_editText_name"
+            app:layout_constraintEnd_toStartOf="@+id/ex3_editText_date" />
+        <EditText
+            android:id="@+id/ex3_editText_date"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:ems="8"
+            android:hint="Дата"
+            android:inputType="number"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/textViewTimeTitleEdit"
+            app:layout_constraintStart_toEndOf="@id/ex3_editText_mark"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layoutPeopleEdit"
-        android:layout_width="wrap_content"
+        android:id="@+id/ex4_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutTimeEdit">
-
-        <TextView
-            android:id="@+id/textViewDowTitleEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/dow_title"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/editTextDow"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/ex3_layout">
 
         <EditText
-            android:id="@+id/editTextDow"
-            android:layout_width="wrap_content"
+            android:id="@+id/ex4_editText_name"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
             android:autofillHints=""
-            android:ems="7"
-            android:hint="@string/dow_hint"
-            android:inputType="textPersonName"
+            android:ems="8"
+            android:hint="Наименование"
+            android:inputType="number"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ex4_editText_mark" />
+        <EditText
+            android:id="@+id/ex4_editText_mark"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:ems="8"
+            android:hint="Оценка"
+            android:inputType="number"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ex4_editText_name"
+            app:layout_constraintEnd_toStartOf="@+id/ex4_editText_date" />
+        <EditText
+            android:id="@+id/ex4_editText_date"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:ems="8"
+            android:hint="Дата"
+            android:inputType="number"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/textViewDowTitleEdit"
+            app:layout_constraintStart_toEndOf="@id/ex4_editText_mark"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layoutAbstractEdit"
-        android:layout_width="wrap_content"
+        android:id="@+id/ex5_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutPeopleEdit">
-
-        <TextView
-            android:id="@+id/textViewWeekParityTitleEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/week_parity"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/editTextWeekParity"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/ex4_layout">
 
         <EditText
-            android:id="@+id/editTextWeekParity"
-            android:layout_width="wrap_content"
+            android:id="@+id/ex5_editText_name"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
             android:autofillHints=""
-            android:ems="7"
-            android:hint="@string/week_parity_hint"
-            android:inputType="textPersonName"
+            android:ems="8"
+            android:hint="Наименование"
+            android:inputType="number"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ex5_editText_mark" />
+        <EditText
+            android:id="@+id/ex5_editText_mark"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:ems="8"
+            android:hint="Оценка"
+            android:inputType="number"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ex5_editText_name"
+            app:layout_constraintEnd_toStartOf="@+id/ex5_editText_date" />
+        <EditText
+            android:id="@+id/ex5_editText_date"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:ems="8"
+            android:hint="Дата"
+            android:inputType="number"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/textViewWeekParityTitleEdit"
+            app:layout_constraintStart_toEndOf="@+id/ex5_editText_mark"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layoutCommentEdit"
+        android:id="@+id/end_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutAbstractEdit">
+        app:layout_constraintTop_toBottomOf="@+id/ex5_layout">
 
         <TextView
-            android:id="@+id/textViewReqEqTitleEdit"
-            android:layout_width="wrap_content"
+            android:id="@+id/meanMark_textView"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:text="@string/req_equip"
-            app:layout_constraintBottom_toTopOf="@id/editTextReqEq"
+            android:text="Средняя оценка"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/meanMark_value_textView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/editTextReqEq"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/meanMark_value_textView"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:width="250dp"
             android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/req_equip_hint"
-            android:inputType="textPersonName"
-            android:lines="4"
-            android:maxWidth="250dp"
-            android:maxLines="4"
+            android:ems="8"
+            android:hint="Значение"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/meanMark_textView"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/confirmed_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/end_date">
+
+        <RadioButton
+            android:id="@+id/confirmed_radioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Зачетка подтверждена"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewReqEqTitleEdit" />
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id="@+id/button_confirm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
         android:text="@string/button_ok"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutCommentEdit" />
+        app:layout_constraintTop_toBottomOf="@+id/confirmed_layout" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

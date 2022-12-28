@@ -10,12 +10,12 @@ class GroupOperatorConverter
         val resultString: StringBuilder = java.lang.StringBuilder()
         for (i in groups) {
             resultString.append("###${i.name}")
-            for (j in i.listOfSubjects)
-                resultString.append(
-                    "##${j.nameOfSubject}" +
-                    "#${j.nameOfTeacher}#${j.auditory}#${j.building}#${j.time}" +
-                        "#${j.dow}#${j.weekParity}#${j.comment}"
-                )
+            for (j in i.listOfStudents) {
+                resultString.append("##${j.name}#${j.number}")
+                for (k in j.exams)
+                    resultString.append("#${k.name}?${k.mark}?${k.date}")
+                resultString.append("#${j.mean}${j.confirmed}")
+            }
         }
         return resultString.toString()
     }
@@ -25,18 +25,29 @@ class GroupOperatorConverter
         val groupsForReturn: ArrayList<Group> = ArrayList()
         val groupsString: List<String> = data.substring(3).split("###")
         for (i in groupsString) {
-            val partsOfGroup: List<String> = i.split("##")
-            val tempSubjects: ArrayList<Subject> = ArrayList()
-            for (j in 1 until partsOfGroup.size) {
-                val partsOfSubject: List<String> = partsOfGroup[j].split("#")
-                val tempExam = Subject(
-                    partsOfSubject[0], partsOfSubject[1], partsOfSubject[2].toInt(),
-                    partsOfSubject[3], partsOfSubject[4], partsOfSubject[5].toInt(),
-                    partsOfSubject[6].toInt(), partsOfSubject[7]
+            val studentsStrings: List<String> = i.substring(2).split("##")
+            val tempStudents: ArrayList<Student> = ArrayList()
+            for (student in studentsStrings) {
+                val partsOfStudentStrings: List<String> = student.split("#")
+                val tempExams: ArrayList<Exam> = ArrayList()
+                for (k in 2 until partsOfStudentStrings.size-2) {
+                    val tempExamProp = partsOfStudentStrings[k].split("?")
+                    tempExams.add(
+                        Exam(
+                            tempExamProp[0],
+                            tempExamProp[1].toInt(),
+                            tempExamProp[2]
+                        )
+                    )
+                }
+                val tempStudent = Student(
+                    partsOfStudentStrings[0], partsOfStudentStrings[1].toInt(),
+                    tempExams,
+                    partsOfStudentStrings[partsOfStudentStrings.size-2].toFloat(), partsOfStudentStrings[partsOfStudentStrings.size-2].toBoolean()
                 )
-                tempSubjects.add(tempExam)
+                tempStudents.add(tempStudent)
             }
-            groupsForReturn.add(Group(partsOfGroup[0], tempSubjects))
+            groupsForReturn.add(Group(studentsStrings[0], tempStudents))
         }
         return groupsForReturn
     }

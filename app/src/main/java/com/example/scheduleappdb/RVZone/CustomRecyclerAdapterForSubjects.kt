@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.scheduleappdb.R
 
@@ -14,9 +13,9 @@ class CustomRecyclerAdapterForExams(private val namesE: List<String>,
     RecyclerView.Adapter<CustomRecyclerAdapterForExams.MyViewHolder>()
 {
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val textViewName: TextView = itemView.findViewById(R.id.textViewName)
-        val textViewDow: TextView = itemView.findViewById(R.id.textViewRVTime)
-        val textViewTime: TextView = itemView.findViewById(R.id.textViewRVDow)
+        val textViewName: TextView = itemView.findViewById(R.id.rvitem_name_textView)
+        val textViewDow: TextView = itemView.findViewById(R.id.rvitem_mean_textView_value)
+        val textViewTime: TextView = itemView.findViewById(R.id.rvitem_number_textView_value)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {

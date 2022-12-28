@@ -40,22 +40,22 @@ class MainActivity :AppCompatActivity(),
 
     private val gson: Gson = GsonBuilder().create()
     private lateinit var connection: Connection
-    private var connectionStage: Int = 0
+    private var connectionStage: Int = Constants.ConnectionStage.WaitingForConnection.toInt
     private var startTime: Long = 0
 
     private lateinit var db: AppDatabase
     private lateinit var goDao: GroupOperatorDao
 
-    private lateinit var textViewGroupName: TextView
+    private lateinit var cm_groupName_textView: TextView
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var nv: NavigationView
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
-    private lateinit var progressBar: ProgressBar
-    private lateinit var recyclerViewExams: RecyclerView
+    private lateinit var cm_progressBar: ProgressBar
+    private lateinit var cm_rv_students: RecyclerView
 
     private var go: GroupOperator = GroupOperator()
     private var currentGroupID: Int = -1
-    private var currentExamID: Int = -1
+    private var currentStudentID: Int = -1
     private var waitingForUpdate: Boolean = false
 
     private lateinit var binding: ActivityMainBinding
@@ -67,44 +67,66 @@ class MainActivity :AppCompatActivity(),
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
-        textViewGroupName = findViewById(R.id.textViewGroupName)
+        cm_groupName_textView = findViewById(R.id.cm_groupName_textView)
         drawerLayout = binding.drawerLayout
-        nv = binding.navView
+        nv = binding.amNavigationView
         nv.setNavigationItemSelectedListener(this)
         toolbar = findViewById(R.id.toolbar)
         toolbar.apply { setNavigationIcon(R.drawable.ic_my_menu) }
         toolbar.setNavigationOnClickListener { drawerLayout.openDrawer(GravityCompat.START) }
-        progressBar = findViewById(R.id.progressBar)
-        recyclerViewExams = findViewById(R.id.recyclerViewExams)
-        recyclerViewExams.visibility = View.INVISIBLE
-        recyclerViewExams.layoutManager = LinearLayoutManager(this)
+        cm_progressBar = findViewById(R.id.cm_progressBar)
+        cm_rv_students = findViewById(R.id.cm_rv_students)
+        cm_rv_students.visibility = View.INVISIBLE
+        cm_rv_students.layoutManager = LinearLayoutManager(this)
 
-        recyclerViewExams.addOnItemTouchListener(
+        cm_rv_students.addOnItemTouchListener(
             RecyclerItemClickListener(
-                recyclerViewExams,
+                cm_rv_students,
                 object : RecyclerItemClickListener.OnItemClickListener {
                     override fun onItemClick(view: View, position: Int) {
-                        currentExamID = position
-                        val examDetails = SubjectDetailsDialogFragment()
-                        val tempExam = go.getSubject(currentGroupID, currentExamID)
+                        currentStudentID = position
+                        val studentDetails = SubjectDetailsDialogFragment()
+                        val tempStudent = go.getStudent(currentGroupID, currentStudentID)
                         val bundle = Bundle()
-                        bundle.putString("subjectName", tempExam.nameOfSubject)
-                        bundle.putString("teacherName", tempExam.nameOfTeacher)
-                        bundle.putString("auditory", tempExam.auditory.toString())
-                        bundle.putString("building", tempExam.building)
-                        bundle.putString("time", tempExam.time)
-                        bundle.putString("dow", tempExam.dow.toString())
-                        bundle.putString("week_parity", tempExam.weekParity.toString())
-                        bundle.putString("req_eq", tempExam.comment)
+                        bundle.putString("name", tempStudent.name)
+                        bundle.putInt("number", tempStudent.number)
+                        bundle.putString("ex1_name", tempStudent.ex1_name)
+
+                        val ex1_name: String,
+                        val ex1_mark: Int,
+                        val ex1_date: String,
+                        val ex2_name: String,
+                        val ex2_mark: Int,
+                        val ex2_date: String,
+                        val ex3_name: String,
+                        val ex3_mark: Int,
+                        val ex3_date: String,
+                        val ex4_name: String,
+                        val ex4_mark: Int,
+                        val ex4_date: String,
+                        val ex5_name: String,
+                        val ex5_mark: Int,
+                        val ex5_date: String,
+
+                        val mean: Double,
+                        val confirmed: Boolean
+                        bundle.putString("name", tempStudent.name)
+                        bundle.putString("teacherName", tempStudent.nameOfTeacher)
+                        bundle.putString("auditory", tempStudent.auditory.toString())
+                        bundle.putString("building", tempStudent.building)
+                        bundle.putString("time", tempStudent.time)
+                        bundle.putString("dow", tempStudent.dow.toString())
+                        bundle.putString("week_parity", tempStudent.weekParity.toString())
+                        bundle.putString("req_eq", tempStudent.comment)
                         bundle.putString("connection", connectionStage.toString())
-                        examDetails.arguments = bundle
-                        examDetails.show(supportFragmentManager, "MyCustomDialog")
+                        studentDetails.arguments = bundle
+                        studentDetails.show(supportFragmentManager, "MyCustomDialog")
                     }
                     override fun onItemLongClick(view: View, position: Int) {
-                        currentExamID = position
+                        currentStudentID = position
                         val toast = Toast.makeText(
                             applicationContext,
-                            "Корпус: " + go.getSubject(currentGroupID, currentExamID).building,
+                            "Корпус: " + go.getStudent(currentGroupID, currentStudentID).building,
                             Toast.LENGTH_SHORT
                         )
                         toast.show()
@@ -216,7 +238,7 @@ class MainActivity :AppCompatActivity(),
                             toast.show()
                         }
                         connectionStage = Constants.ConnectionStage.OutOfConnection.toInt
-                        progressBar.visibility = View.INVISIBLE
+                        cm_progressBar.visibility = View.INVISIBLE
                         go = goDao.getById(1)
                         for (i in 0 until go.getGroups().size)
                             activity.runOnUiThread {
@@ -247,7 +269,7 @@ class MainActivity :AppCompatActivity(),
                 toast.show()
             }
 
-            progressBar.visibility = View.INVISIBLE
+            cm_progressBar.visibility = View.INVISIBLE
             for (i in 0 until go.getGroups().size)
                 nv.menu.removeItem(i)
             val tempArrayListGroups: ArrayList<Group> = tempGo.getGroups()
@@ -256,8 +278,8 @@ class MainActivity :AppCompatActivity(),
                 nv.menu.add(0, i, 0, tempArrayListGroups[i].name as CharSequence)
             if (waitingForUpdate || connectionStage == Constants.ConnectionStage.OutOfConnection.toInt) {
                 if (currentGroupID != -1){
-                    recyclerViewExams.adapter = CustomRecyclerAdapterForExams(
-                        go.getSubjectsNames(currentGroupID),
+                    cm_rv_students.adapter = CustomRecyclerAdapterForExams(
+                        go.getNames(currentGroupID),
                         go.getDow(currentGroupID),
                         go.getTimes(currentGroupID)
                     )
@@ -277,27 +299,27 @@ class MainActivity :AppCompatActivity(),
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         val tempString = "Группа ${item.title}"
-        textViewGroupName.text = tempString
+        cm_groupName_textView.text = tempString
 
         invalidateOptionsMenu()
         currentGroupID = item.itemId
-        recyclerViewExams.adapter = CustomRecyclerAdapterForExams(
-            go.getSubjectsNames(currentGroupID),
-            go.getDow(currentGroupID),
-            go.getTimes(currentGroupID)
+        cm_rv_students.adapter = CustomRecyclerAdapterForExams(
+            go.getNames(currentGroupID),
+            go.getNumbers(currentGroupID),
+            go.getMeans(currentGroupID)
         )
-        recyclerViewExams.visibility = View.VISIBLE
+        cm_rv_students.visibility = View.VISIBLE
         return true
     }
 
     fun delExam() {
-        connection.sendDataToServer("d$currentGroupID,$currentExamID")
+        connection.sendDataToServer("d$currentGroupID,$currentStudentID")
         waitingForUpdate = true
     }
 
     override fun sendInputSortId(sortId: Int) {
         if (sortId > -1 && sortId < 8) {
-            go.sortSubjects(currentGroupID, sortId)
+            go.sortStudents(currentGroupID, sortId)
             if (connectionStage == Constants.ConnectionStage.SuccessfulConnection.toInt)
                 connection.sendDataToServer("u" + gson.toJson(go))
         }
@@ -305,16 +327,16 @@ class MainActivity :AppCompatActivity(),
             val manager: FragmentManager = supportFragmentManager
             val myDialogFragmentDelSubject = MyDialogFragmentDelSubject()
             val bundle = Bundle()
-            bundle.putString("subject", go.getSubject(currentGroupID, currentExamID).nameOfSubject)
+            bundle.putString("subject", go.getStudent(currentGroupID, currentStudentID).name)
             myDialogFragmentDelSubject.arguments = bundle
             myDialogFragmentDelSubject.show(manager, "myDialog")
         }
         if (sortId == 9) {        // Изменение
-            val tempExam = go.getSubject(currentGroupID, currentExamID)
+            val tempExam = go.getStudent(currentGroupID, currentStudentID)
             val intent = Intent()
             intent.setClass(this, EditSubjectActivity::class.java)
             intent.putExtra("action", Constants.Action.Editing.toInt)
-            intent.putExtra("subject", tempExam.nameOfSubject)
+            intent.putExtra("subject", tempExam.name)
             intent.putExtra("teacher", tempExam.nameOfTeacher)
             intent.putExtra("auditory", tempExam.auditory.toString())
             intent.putExtra("building", tempExam.building)
@@ -326,8 +348,8 @@ class MainActivity :AppCompatActivity(),
             setResult(1)
             resultLauncher.launch(intent)
         }
-        recyclerViewExams.adapter = CustomRecyclerAdapterForExams(
-            go.getSubjectsNames(currentGroupID),
+        cm_rv_students.adapter = CustomRecyclerAdapterForExams(
+            go.getNames(currentGroupID),
             go.getDow(currentGroupID),
             go.getTimes(currentGroupID)
         )
@@ -347,7 +369,7 @@ class MainActivity :AppCompatActivity(),
             val people = data.getIntExtra("dow", -1)
             val abstract = data.getIntExtra("week_parity", -1)
             val comment = data.getStringExtra("req_eq") ?: ""
-            val tempSubject = Subject(
+            val tempStudent = Student(
                 examName,
                 teacherName,
                 auditory,
@@ -357,7 +379,7 @@ class MainActivity :AppCompatActivity(),
                 abstract,
                 comment
             )
-            val tempExamJSON: String = gson.toJson(tempSubject)
+            val tempExamJSON: String = gson.toJson(tempStudent)
 
             if (action == Constants.Action.Adding.toInt) {
                 val tempStringToSend = "a${go.getGroups()[currentGroupID].name}##$tempExamJSON"
@@ -365,7 +387,7 @@ class MainActivity :AppCompatActivity(),
                 waitingForUpdate = true
             }
             if (action == Constants.Action.Editing.toInt) {
-                val tempStringToSend = "e$currentGroupID,$currentExamID##$tempExamJSON"
+                val tempStringToSend = "e$currentGroupID,$currentStudentID##$tempExamJSON"
                 connection.sendDataToServer(tempStringToSend)
                 waitingForUpdate = true
             }

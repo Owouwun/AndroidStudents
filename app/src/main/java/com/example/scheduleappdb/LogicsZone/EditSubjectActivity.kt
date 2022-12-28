@@ -1,6 +1,5 @@
 package com.example.scheduleappdb.LogicsZone
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,7 +7,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.example.scheduleappdb.R
-import java.text.SimpleDateFormat
 import java.time.LocalTime
 import java.util.*
 
@@ -26,9 +24,9 @@ class EditSubjectActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_exam)
 
-        editSubjectName = findViewById(R.id.editTextSubjectName)
-        editTeacherName = findViewById(R.id.editTextTeacherName)
-        editAuditory = findViewById(R.id.editTextAuditory)
+        editSubjectName = findViewById(R.id.name_editText)
+        editTeacherName = findViewById(R.id.number_editText)
+        editAuditory = findViewById(R.id.ex1_editText_name)
         editBuilding = findViewById(R.id.editBuildingDate)
         editTime = findViewById(R.id.editTextTime)
         editDow = findViewById(R.id.editTextDow)
