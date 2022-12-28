@@ -13,14 +13,14 @@ class CustomRecyclerAdapterForStudents(private val names: List<String>,
     RecyclerView.Adapter<CustomRecyclerAdapterForStudents.MyViewHolder>()
 {
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val name_textView: TextView = itemView.findViewById(R.id.rvitem_name_textView)
-        val number_textView: TextView = itemView.findViewById(R.id.rvitem_number_textView_value)
-        val mean_textView: TextView = itemView.findViewById(R.id.rvitem_mean_textView_value)
+        val name_textView: TextView = itemView.findViewById(R.id.rvis_textView_name)
+        val number_textView: TextView = itemView.findViewById(R.id.rvis_textView_number_value)
+        val mean_textView: TextView = itemView.findViewById(R.id.rvis_textView_mean_value)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.recyclerview_item, parent, false)
+            .inflate(R.layout.recyclerview_item_student, parent, false)
         return MyViewHolder(itemView)
     }
 

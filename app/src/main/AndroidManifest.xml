@@ -18,7 +18,7 @@
         android:theme="@style/Theme.MADIStudents"
         tools:targetApi="31">
         <activity
-            android:name="com.example.scheduleappdb.LogicsZone.EditSubjectActivity"
+            android:name="com.example.scheduleappdb.LogicsZone.StudentActivity"
             android:exported="false" />
         <activity
             android:name="com.example.scheduleappdb.LogicsZone.MainActivity"

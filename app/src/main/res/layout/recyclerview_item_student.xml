@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layoutItem"
+    android:id="@+id/rv_item_student"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/rvitem_name_textView"
+        android:id="@+id/rvis_textView_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="25sp"
@@ -17,24 +16,24 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/rvitem_number_textView"
+        android:id="@+id/rvis_textView_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:text="Номер зачетки"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rvitem_name_textView" />
+        app:layout_constraintTop_toBottomOf="@+id/rvis_textView_name" />
 
     <TextView
-        android:id="@+id/rvitem_number_textView_value"
+        android:id="@+id/rvis_textView_number_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        app:layout_constraintStart_toEndOf="@+id/rvitem_number_textView"
-        app:layout_constraintTop_toBottomOf="@+id/rvitem_name_textView" />
+        app:layout_constraintStart_toEndOf="@+id/rvis_textView_number"
+        app:layout_constraintTop_toBottomOf="@+id/rvis_textView_name" />
 
     <TextView
-        android:id="@+id/rvitem_mean_textView"
+        android:id="@+id/rvis_textView_mean"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
@@ -43,16 +42,16 @@
         android:text="Средняя оценка"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rvitem_number_textView" />
+        app:layout_constraintTop_toBottomOf="@+id/rvis_textView_number" />
 
     <TextView
-        android:id="@+id/rvitem_mean_textView_value"
+        android:id="@+id/rvis_textView_mean_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/rvitem_mean_textView"
-        app:layout_constraintTop_toBottomOf="@+id/rvitem_number_textView_value" />
+        app:layout_constraintStart_toEndOf="@+id/rvis_textView_mean"
+        app:layout_constraintTop_toBottomOf="@+id/rvis_textView_number_value" />
 </androidx.constraintlayout.widget.ConstraintLayout>

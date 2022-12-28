@@ -17,13 +17,9 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.scheduleappdb.R
-import com.example.scheduleappdb.databinding.ActivityMainBinding
+import com.example.scheduleappdb.databinding.MainActivityBinding
 import com.example.scheduleappdb.RVZone.CustomRecyclerAdapterForStudents
 import com.example.scheduleappdb.RVZone.RecyclerItemClickListener
-//import com.example.scheduleappdb.UIZone.group.DbHelper
-//import com.example.scheduleappdb.UIZone.group.Subject
-//import com.example.scheduleappdb.UIZone.group.Group
-//import com.example.scheduleappdb.UIZone.group.GroupOperator
 import com.example.scheduleappdb.UIZone.group.*
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
@@ -36,7 +32,7 @@ import java.net.Socket
 
 class MainActivity :AppCompatActivity(),
     NavigationView.OnNavigationItemSelectedListener,
-    SubjectDetailsDialogFragment.OnInputListenerSortId {
+    StudentDetailsDialogFragment.OnInputListenerSortId {
 
     private val gson: Gson = GsonBuilder().create()
     private lateinit var connection: Connection
@@ -58,17 +54,17 @@ class MainActivity :AppCompatActivity(),
     private var currentStudentID: Int = -1
     private var waitingForUpdate: Boolean = false
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: MainActivityBinding
 
     fun putStudent(bundle: Bundle, student: Student) {
-        bundle.putString("name", student.name)
+        bundle.putString("studentName", student.name)
         bundle.putInt("number", student.number)
         bundle.putSerializable("exams", student.exams)
         bundle.putFloat("mean", student.mean)
         bundle.putBoolean("confirmed",student.confirmed)
     }
     fun putStudent(intent: Intent, student: Student) {
-        intent.putExtra("name", student.name)
+        intent.putExtra("studentName", student.name)
         intent.putExtra("number", student.number)
         intent.putExtra("exams", student.exams)
         intent.putExtra("mean", student.mean)
@@ -77,16 +73,16 @@ class MainActivity :AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = MainActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.appBarMain.toolbar)
+        setSupportActionBar(binding.maAppBar.abToolbar)
 
-        cm_groupName_textView = findViewById(R.id.cm_groupName_textView)
-        drawerLayout = binding.drawerLayout
-        nv = binding.amNavigationView
+        cm_groupName_textView = findViewById(R.id.cm_textView_groupName)
+        drawerLayout = binding.maLayoutDrawer
+        nv = binding.maNavigationView
         nv.setNavigationItemSelectedListener(this)
-        toolbar = findViewById(R.id.toolbar)
+        toolbar = findViewById(R.id.ab_toolbar)
         toolbar.apply { setNavigationIcon(R.drawable.ic_my_menu) }
         toolbar.setNavigationOnClickListener { drawerLayout.openDrawer(GravityCompat.START) }
         cm_progressBar = findViewById(R.id.cm_progressBar)
@@ -100,7 +96,7 @@ class MainActivity :AppCompatActivity(),
                 object : RecyclerItemClickListener.OnItemClickListener {
                     override fun onItemClick(view: View, position: Int) {
                         currentStudentID = position
-                        val studentDetails = SubjectDetailsDialogFragment()
+                        val studentDetails = StudentDetailsDialogFragment()
                         val tempStudent = go.getStudent(currentGroupID, currentStudentID)
                         val bundle = Bundle()
 
@@ -149,9 +145,9 @@ class MainActivity :AppCompatActivity(),
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_add) {
+        if (item.itemId == R.id.menu_actionAdd) {
             val intent = Intent()
-            intent.setClass(this, EditSubjectActivity::class.java)
+            intent.setClass(this, StudentActivity::class.java)
             intent.putExtra("action", Constants.Action.Adding.toInt)
             setResult(1)
             resultLauncher.launch(intent)
@@ -228,10 +224,11 @@ class MainActivity :AppCompatActivity(),
                         connectionStage = Constants.ConnectionStage.OutOfConnection.toInt
                         cm_progressBar.visibility = View.INVISIBLE
                         go = goDao.getById(1)
-                        for (i in 0 until go.getGroups().size)
-                            activity.runOnUiThread {
-                                nv.menu.add(0, i, 0, go.getGroups()[i].name as CharSequence)
-                            }
+                        if (go!=null)
+                            for (i in 0 until go.getGroups()!!.size)
+                                activity.runOnUiThread {
+                                    nv.menu.add(0, i, 0, go.getGroups()!![i].name as CharSequence)
+                                }
                     }
                 }
             }
@@ -258,12 +255,12 @@ class MainActivity :AppCompatActivity(),
             }
 
             cm_progressBar.visibility = View.INVISIBLE
-            for (i in 0 until go.getGroups().size)
+            for (i in 0 until (go.getGroups()?.size?:0))
                 nv.menu.removeItem(i)
-            val tempArrayListGroups: ArrayList<Group> = tempGo.getGroups()
+            val tempArrayListGroups: ArrayList<Group>? = tempGo.getGroups()
             go.setGroups(tempArrayListGroups)
-            for (i in 0 until tempArrayListGroups.size)
-                nv.menu.add(0, i, 0, tempArrayListGroups[i].name as CharSequence)
+            for (i in 0 until (tempArrayListGroups?.size?:0))
+                nv.menu.add(0, i, 0, tempArrayListGroups!![i].name as CharSequence)
             if (waitingForUpdate || connectionStage == Constants.ConnectionStage.OutOfConnection.toInt) {
                 if (currentGroupID != -1){
                     cm_rv_students.adapter = CustomRecyclerAdapterForStudents(
@@ -313,16 +310,16 @@ class MainActivity :AppCompatActivity(),
         }
         if (sortId == 8) {        // Удаление
             val manager: FragmentManager = supportFragmentManager
-            val myDialogFragmentDelSubject = MyDialogFragmentDelSubject()
+            val myDialogFragmentDelStudent = MyDialogFragmentDelStudent()
             val bundle = Bundle()
-            bundle.putString("subject", go.getStudent(currentGroupID, currentStudentID).name)
-            myDialogFragmentDelSubject.arguments = bundle
-            myDialogFragmentDelSubject.show(manager, "myDialog")
+            bundle.putString("studentName", go.getStudent(currentGroupID, currentStudentID).name)
+            myDialogFragmentDelStudent.arguments = bundle
+            myDialogFragmentDelStudent.show(manager, "myDialog")
         }
         if (sortId == 9) {        // Изменение
             val tempStudent = go.getStudent(currentGroupID, currentStudentID)
             val intent = Intent()
-            intent.setClass(this, EditSubjectActivity::class.java)
+            intent.setClass(this, StudentActivity::class.java)
             intent.putExtra("action", Constants.Action.Editing.toInt)
 
             putStudent(intent, tempStudent)
@@ -345,17 +342,17 @@ class MainActivity :AppCompatActivity(),
             val action = data?.getIntExtra("action", -1)!!
 
             val tempStudent = Student(
-                data.getStringExtra("name") ?: "",
+                data.getStringExtra("studentName") ?: "",
                 data.getIntExtra("number",-1),
                 data.getSerializableExtra("exams") as ArrayList<Exam>,
-                //data.getSerializableExtra("exams", Class<ArrayList<Exam>>)
+                //data.getParcelableArrayListExtra("exams", Class<Exam>),
                 data.getFloatExtra("mean", -1F),
                 data.getBooleanExtra("confirmed", false)
             )
             val tempExamJSON: String = gson.toJson(tempStudent)
 
             if (action == Constants.Action.Adding.toInt) {
-                val tempStringToSend = "a${go.getGroups()[currentGroupID].name}##$tempExamJSON"
+                val tempStringToSend = "a${go.getGroups()!![currentGroupID].name}##$tempExamJSON"
                 connection.sendDataToServer(tempStringToSend)
                 waitingForUpdate = true
             }

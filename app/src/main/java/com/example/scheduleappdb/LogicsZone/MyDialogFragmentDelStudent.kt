@@ -5,14 +5,14 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 
-class MyDialogFragmentDelSubject: DialogFragment()
+class MyDialogFragmentDelStudent: DialogFragment()
 {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog
     {
         val arguments: Bundle? = arguments
-        val examName = arguments?.getString("subject")
+        val studentName = arguments?.getString("studentName")
         val builder = AlertDialog.Builder(activity)
-        builder.setMessage("Будет удален экзамен по предмету: $examName")
+        builder.setMessage("Будет удалена зачетная книжка студента $studentName")
             .setTitle("Внимание!")
             .setPositiveButton("Продолжить"
             ) { _, _ -> (activity as MainActivity?)?.delExam() }

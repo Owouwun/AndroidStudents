@@ -9,7 +9,7 @@ class GroupOperatorConverter
         val resultString: StringBuilder = java.lang.StringBuilder()
         for (i in groups) {
             resultString.append("###${i.name}")
-            for (j in i.listOfStudents) {
+            for (j in i.students) {
                 resultString.append("##${j.name}#${j.number}")
                 if (j.exams!=null)
                     for (k in j.exams!!)
