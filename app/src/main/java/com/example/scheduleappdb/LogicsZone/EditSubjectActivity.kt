@@ -4,126 +4,140 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.RadioButton
+import android.widget.TextView
 import android.widget.Toast
 import com.example.scheduleappdb.R
-import java.time.LocalTime
+import com.example.scheduleappdb.UIZone.group.Exam
+import com.example.scheduleappdb.UIZone.group.Student
 import java.util.*
+import kotlin.collections.ArrayList
 
 class EditSubjectActivity : AppCompatActivity() {
-    private lateinit var editSubjectName: EditText
-    private lateinit var editTeacherName: EditText
-    private lateinit var editAuditory: EditText
-    private lateinit var editBuilding: EditText
-    private lateinit var editTime: EditText
-    private lateinit var editDow: EditText
-    private lateinit var editWeekParity: EditText
-    private lateinit var editReqEq: EditText
+    private lateinit var aex_name_editText: EditText
+    private lateinit var aex_number_editText: EditText
+    private lateinit var aex_ex1_editText_name: EditText
+    private lateinit var aex_ex1_editText_mark: EditText
+    private lateinit var aex_ex1_editText_date: EditText
+    private lateinit var aex_ex2_editText_name: EditText
+    private lateinit var aex_ex2_editText_mark: EditText
+    private lateinit var aex_ex2_editText_date: EditText
+    private lateinit var aex_ex3_editText_name: EditText
+    private lateinit var aex_ex3_editText_mark: EditText
+    private lateinit var aex_ex3_editText_date: EditText
+    private lateinit var aex_ex4_editText_name: EditText
+    private lateinit var aex_ex4_editText_mark: EditText
+    private lateinit var aex_ex4_editText_date: EditText
+    private lateinit var aex_ex5_editText_name: EditText
+    private lateinit var aex_ex5_editText_mark: EditText
+    private lateinit var aex_ex5_editText_date: EditText
+    private lateinit var meanMark_value_textView: TextView
+    private lateinit var confirmed_checkBox: CheckBox
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_exam)
 
-        editSubjectName = findViewById(R.id.name_editText)
-        editTeacherName = findViewById(R.id.number_editText)
-        editAuditory = findViewById(R.id.ex1_editText_name)
-        editBuilding = findViewById(R.id.editBuildingDate)
-        editTime = findViewById(R.id.editTextTime)
-        editDow = findViewById(R.id.editTextDow)
-        editWeekParity = findViewById(R.id.editTextWeekParity)
-        editReqEq = findViewById(R.id.editTextReqEq)
+        aex_name_editText = findViewById(R.id.name_editText)
+        aex_number_editText = findViewById(R.id.number_editText)
+        aex_ex1_editText_name = findViewById(R.id.ex1_editText_name)
+        aex_ex1_editText_mark = findViewById(R.id.ex1_editText_mark)
+        aex_ex1_editText_date = findViewById(R.id.ex1_editText_date)
+        aex_ex2_editText_name = findViewById(R.id.ex2_editText_name)
+        aex_ex2_editText_mark = findViewById(R.id.ex2_editText_mark)
+        aex_ex2_editText_date = findViewById(R.id.ex2_editText_date)
+        aex_ex3_editText_name = findViewById(R.id.ex3_editText_name)
+        aex_ex3_editText_mark = findViewById(R.id.ex3_editText_mark)
+        aex_ex3_editText_date = findViewById(R.id.ex3_editText_date)
+        aex_ex4_editText_name = findViewById(R.id.ex4_editText_name)
+        aex_ex4_editText_mark = findViewById(R.id.ex4_editText_mark)
+        aex_ex4_editText_date = findViewById(R.id.ex4_editText_date)
+        aex_ex5_editText_name = findViewById(R.id.ex5_editText_name)
+        aex_ex5_editText_mark = findViewById(R.id.ex5_editText_mark)
+        aex_ex5_editText_date = findViewById(R.id.ex5_editText_date)
+        meanMark_value_textView = findViewById(R.id.meanMark_value_textView)
+        confirmed_checkBox = findViewById(R.id.confirmed_checkBox)
 
         val action = intent.getIntExtra("action", -1)
 
         findViewById<Button>(R.id.button_confirm).setOnClickListener { confirmChanges(action) }
 
         if (action == Constants.Action.Editing.toInt) {
-            editSubjectName.setText(intent.getStringExtra("subject") ?: "")
-            editTeacherName.setText(intent.getStringExtra("teacher") ?: "")
-            editAuditory.setText(intent.getStringExtra("auditory") ?: "")
-            editBuilding.setText(intent.getStringExtra("building") ?: "")
-            editTime.setText(intent.getStringExtra("time") ?: "")
-            editDow.setText(
-                when (intent.getStringExtra("dow") ?: "") {
-                    "1" -> "Понедельник"
-                    "2" -> "Вторник"
-                    "3" -> "Среда"
-                    "4" -> "Четверг"
-                    "5" -> "Пятница"
-                    "6" -> "Суббота"
-                    "7" -> "Воскресенье"
-                    else -> {
-                        "-1"
+            val tempStudent = Student(
+                intent.getStringExtra("name") ?: "",
+                intent.getIntExtra("number",-1),
+                intent.getSerializableExtra("exams") as ArrayList<Exam>,
+                //data.getSerializableExtra("exams", Class<ArrayList<Exam>>)
+                intent.getFloatExtra("mean", -1F),
+                intent.getBooleanExtra("confirmed", false)
+            )
+            aex_name_editText.setText(tempStudent.name)
+            aex_number_editText.setText(intent.getIntExtra("number", -1).toString())
+            if (tempStudent.exams!=null) {
+                var exams_left = tempStudent.exams!!.size
+                aex_ex1_editText_name.setText(tempStudent.exams!![0].name)
+                aex_ex1_editText_mark.setText(tempStudent.exams!![0].mark.toString())
+                aex_ex1_editText_date.setText(tempStudent.exams!![0].date)
+                exams_left--
+                if (exams_left>0) {
+                    aex_ex2_editText_name.setText(tempStudent.exams!![1].name)
+                    aex_ex2_editText_mark.setText(tempStudent.exams!![1].mark.toString())
+                    aex_ex2_editText_date.setText(tempStudent.exams!![1].date)
+                    exams_left--
+                    if (exams_left>0) {
+                        aex_ex3_editText_name.setText(tempStudent.exams!![2].name)
+                        aex_ex3_editText_mark.setText(tempStudent.exams!![2].mark.toString())
+                        aex_ex3_editText_date.setText(tempStudent.exams!![2].date)
+                        exams_left--
+                        if (exams_left>0) {
+                            aex_ex4_editText_name.setText(tempStudent.exams!![3].name)
+                            aex_ex4_editText_mark.setText(tempStudent.exams!![3].mark.toString())
+                            aex_ex4_editText_date.setText(tempStudent.exams!![3].date)
+                            exams_left--
+                            if (exams_left>0) {
+                                aex_ex5_editText_name.setText(tempStudent.exams!![4].name)
+                                aex_ex5_editText_mark.setText(tempStudent.exams!![4].mark.toString())
+                                aex_ex5_editText_date.setText(tempStudent.exams!![4].date)
+                            }
+                        }
                     }
-                })
-            if ((intent.getStringExtra("week_parity") ?: "") == "1")
-                editWeekParity.setText("Четная")
-            else
-                editWeekParity.setText("Нечетная")
-            editReqEq.setText(intent.getStringExtra("req_eq") ?: "")
+                }
+            }
+            meanMark_value_textView.text = tempStudent.mean.toString()
         }
     }
 
     private fun confirmChanges(action: Int) {
-        if (editSubjectName.text.toString() != "" && editTeacherName.text.toString() != ""
-            && editAuditory.text.toString() != "" && editBuilding.text.toString() != ""
-            && editTime.text.toString() != "" && editDow.text.toString() != ""
-            && editWeekParity.text.toString() != "") {
-
-            //if (editWeekParity.text.toString().trim().lowercase(Locale.ROOT) == "четная"
-            //    || editWeekParity.text.toString().trim().lowercase(Locale.ROOT) == "нечетная") {
-            if (Constants.typesOfWeek.contains(editWeekParity.text.toString().trim().lowercase(Locale.ROOT))) {
-                if (isDowValid(editDow.text.toString().trim())
-                    && isTimeValid(editTime.text.toString().trim())) {
-
-                    val intent = Intent(
-                        this@EditSubjectActivity,
-                        MainActivity::class.java
-                    )
-                    intent.putExtra("action", action)
-                    intent.putExtra("subject", editSubjectName.text.toString().trim())
-                    intent.putExtra("teacher", editTeacherName.text.toString().trim())
-                    intent.putExtra("auditory", editAuditory.text.toString().trim().toInt())
-                    intent.putExtra("building", editBuilding.text.toString().trim())
-                    intent.putExtra("time", editTime.text.toString().trim())
-
-                    intent.putExtra("dow", when (editDow.text.toString().trim().lowercase(Locale.ROOT)) {
-                        "понедельник" -> 1
-                        "вторник" -> 2
-                        "среда" -> 3
-                        "четверг" -> 4
-                        "пятница" -> 5
-                        "суббота" -> 6
-                        "воскресенье"  -> 7
-                        else -> {
-                            -1
-                        }
-                    })
-                    //if (editWeekParity.text.toString().trim().lowercase(Locale.ROOT) == "четная")
-                    if (editWeekParity.text.toString().trim().lowercase(Locale.ROOT) == Constants.typesOfWeek.first().toString())
-                        intent.putExtra("week_parity", 1)
-                    else
-                        intent.putExtra("week_parity", 0)
-                    intent.putExtra("req_eq", editReqEq.text.toString().trim())
-                    setResult(RESULT_OK, intent)
-                    finish()
-                } else {
-                    val toast = Toast.makeText (
-                        applicationContext,
-                        "Проверьте день недели и время!",
-                        Toast.LENGTH_SHORT
-                    )
-                    toast.show()
-                }
-            } else {
-                val toast = Toast.makeText (
-                    applicationContext,
-                    "Поле \"Четность недели\" поддерживает только " +
-                            "значения \"четная\" или \"нечетная\"!",
-                    Toast.LENGTH_SHORT
-                )
-                toast.show()
+        if (aex_name_editText.text.toString() != "" && aex_number_editText.text.toString() != "") {
+            val intent = Intent(
+                this@EditSubjectActivity,
+                MainActivity::class.java
+            )
+            fun putStudent(intent: Intent, student: Student) {
+                intent.putExtra("name", student.name)
+                intent.putExtra("number", student.number)
+                intent.putExtra("exams", student.exams)
+                intent.putExtra("mean", student.mean)
+                intent.putExtra("confirmed",student.confirmed)
             }
+            intent.putExtra("action", action)
+            intent.putExtra("name", aex_name_editText.text.toString().trim())
+            intent.putExtra("number", aex_number_editText.text.toString().trim())
+            var Exams: ArrayList<Exam> = ArrayList()
+
+            Exams.add(
+                Exam(
+                    aex_ex1_editText_name.text.toString(),
+                    aex_ex1_editText_mark.text.toString().toInt(),
+                    aex_ex1_editText_date.text.toString()
+                )
+            )
+            intent.putExtra("mean", aex_ex1_editText_mark.text.toString().toInt())
+
+            setResult(RESULT_OK, intent)
+            finish()
         } else {
             val toast = Toast.makeText(
                 applicationContext,
@@ -131,42 +145,6 @@ class EditSubjectActivity : AppCompatActivity() {
                 Toast.LENGTH_SHORT
             )
             toast.show()
-        }
-    }
-
-    /*
-    @SuppressLint("SimpleDateFormat")
-    private fun isDateValid(date: String?): Boolean {
-        val myFormat = SimpleDateFormat("dd.MM.yyyy")
-        myFormat.isLenient = false
-        return try {
-            if (date != null)
-                myFormat.parse(date)
-            true
-        } catch (e: Exception) {
-            false
-        }
-    }*/
-
-    private fun isDowValid(dow: String?): Boolean {
-        return Constants.daysOfWeek.contains(dow?.lowercase(Locale.ROOT))
-        /*
-        val dow_local = dow?.lowercase(Locale.ROOT)
-        return dow_local == "понедельник" ||
-                dow_local == "вторник" ||
-                dow_local == "среда" ||
-                dow_local == "четверг" ||
-                dow_local == "пятница" ||
-                dow_local == "суббота" ||
-                dow_local == "воскресенье"*/
-    }
-
-    private fun isTimeValid(date: String?): Boolean {
-        return try {
-            LocalTime.parse(date)
-            true
-        } catch (e: java.lang.Exception) {
-            false
         }
     }
 }

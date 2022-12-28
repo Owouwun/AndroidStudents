@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.scheduleappdb.R
 import com.example.scheduleappdb.databinding.ActivityMainBinding
-import com.example.scheduleappdb.RVZone.CustomRecyclerAdapterForExams
+import com.example.scheduleappdb.RVZone.CustomRecyclerAdapterForStudents
 import com.example.scheduleappdb.RVZone.RecyclerItemClickListener
 //import com.example.scheduleappdb.UIZone.group.DbHelper
 //import com.example.scheduleappdb.UIZone.group.Subject
@@ -60,6 +60,21 @@ class MainActivity :AppCompatActivity(),
 
     private lateinit var binding: ActivityMainBinding
 
+    fun putStudent(bundle: Bundle, student: Student) {
+        bundle.putString("name", student.name)
+        bundle.putInt("number", student.number)
+        bundle.putSerializable("exams", student.exams)
+        bundle.putFloat("mean", student.mean)
+        bundle.putBoolean("confirmed",student.confirmed)
+    }
+    fun putStudent(intent: Intent, student: Student) {
+        intent.putExtra("name", student.name)
+        intent.putExtra("number", student.number)
+        intent.putExtra("exams", student.exams)
+        intent.putExtra("mean", student.mean)
+        intent.putExtra("confirmed",student.confirmed)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -88,36 +103,9 @@ class MainActivity :AppCompatActivity(),
                         val studentDetails = SubjectDetailsDialogFragment()
                         val tempStudent = go.getStudent(currentGroupID, currentStudentID)
                         val bundle = Bundle()
-                        bundle.putString("name", tempStudent.name)
-                        bundle.putInt("number", tempStudent.number)
-                        bundle.putString("ex1_name", tempStudent.ex1_name)
 
-                        val ex1_name: String,
-                        val ex1_mark: Int,
-                        val ex1_date: String,
-                        val ex2_name: String,
-                        val ex2_mark: Int,
-                        val ex2_date: String,
-                        val ex3_name: String,
-                        val ex3_mark: Int,
-                        val ex3_date: String,
-                        val ex4_name: String,
-                        val ex4_mark: Int,
-                        val ex4_date: String,
-                        val ex5_name: String,
-                        val ex5_mark: Int,
-                        val ex5_date: String,
+                        putStudent(bundle, tempStudent)
 
-                        val mean: Double,
-                        val confirmed: Boolean
-                        bundle.putString("name", tempStudent.name)
-                        bundle.putString("teacherName", tempStudent.nameOfTeacher)
-                        bundle.putString("auditory", tempStudent.auditory.toString())
-                        bundle.putString("building", tempStudent.building)
-                        bundle.putString("time", tempStudent.time)
-                        bundle.putString("dow", tempStudent.dow.toString())
-                        bundle.putString("week_parity", tempStudent.weekParity.toString())
-                        bundle.putString("req_eq", tempStudent.comment)
                         bundle.putString("connection", connectionStage.toString())
                         studentDetails.arguments = bundle
                         studentDetails.show(supportFragmentManager, "MyCustomDialog")
@@ -126,7 +114,7 @@ class MainActivity :AppCompatActivity(),
                         currentStudentID = position
                         val toast = Toast.makeText(
                             applicationContext,
-                            "Корпус: " + go.getStudent(currentGroupID, currentStudentID).building,
+                            "Подтвержден: " + go.getStudent(currentGroupID, currentStudentID).confirmed.toString(),
                             Toast.LENGTH_SHORT
                         )
                         toast.show()
@@ -155,7 +143,7 @@ class MainActivity :AppCompatActivity(),
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        if (currentGroupID != -1)
+        if (currentGroupID != Constants.ConnectionStage.OutOfConnection.toInt)
             menu.getItem(0).isVisible = true
         return true
     }
@@ -278,10 +266,10 @@ class MainActivity :AppCompatActivity(),
                 nv.menu.add(0, i, 0, tempArrayListGroups[i].name as CharSequence)
             if (waitingForUpdate || connectionStage == Constants.ConnectionStage.OutOfConnection.toInt) {
                 if (currentGroupID != -1){
-                    cm_rv_students.adapter = CustomRecyclerAdapterForExams(
+                    cm_rv_students.adapter = CustomRecyclerAdapterForStudents(
                         go.getNames(currentGroupID),
-                        go.getDow(currentGroupID),
-                        go.getTimes(currentGroupID)
+                        go.getNumbers(currentGroupID),
+                        go.getMeans(currentGroupID)
                     )
                 }
                 waitingForUpdate = false
@@ -303,7 +291,7 @@ class MainActivity :AppCompatActivity(),
 
         invalidateOptionsMenu()
         currentGroupID = item.itemId
-        cm_rv_students.adapter = CustomRecyclerAdapterForExams(
+        cm_rv_students.adapter = CustomRecyclerAdapterForStudents(
             go.getNames(currentGroupID),
             go.getNumbers(currentGroupID),
             go.getMeans(currentGroupID)
@@ -332,26 +320,20 @@ class MainActivity :AppCompatActivity(),
             myDialogFragmentDelSubject.show(manager, "myDialog")
         }
         if (sortId == 9) {        // Изменение
-            val tempExam = go.getStudent(currentGroupID, currentStudentID)
+            val tempStudent = go.getStudent(currentGroupID, currentStudentID)
             val intent = Intent()
             intent.setClass(this, EditSubjectActivity::class.java)
             intent.putExtra("action", Constants.Action.Editing.toInt)
-            intent.putExtra("subject", tempExam.name)
-            intent.putExtra("teacher", tempExam.nameOfTeacher)
-            intent.putExtra("auditory", tempExam.auditory.toString())
-            intent.putExtra("building", tempExam.building)
-            intent.putExtra("time", tempExam.time)
-            intent.putExtra("dow", tempExam.dow.toString())
-            intent.putExtra("week_parity", tempExam.weekParity.toString())
-            intent.putExtra("req_eq", tempExam.comment)
-            //startActivityForResult(intent, 1)
+
+            putStudent(intent, tempStudent)
+
             setResult(1)
             resultLauncher.launch(intent)
         }
-        cm_rv_students.adapter = CustomRecyclerAdapterForExams(
+        cm_rv_students.adapter = CustomRecyclerAdapterForStudents(
             go.getNames(currentGroupID),
-            go.getDow(currentGroupID),
-            go.getTimes(currentGroupID)
+            go.getNumbers(currentGroupID),
+            go.getMeans(currentGroupID)
         )
     }
 
@@ -361,23 +343,14 @@ class MainActivity :AppCompatActivity(),
         if (result.resultCode == Activity.RESULT_OK) {
             val data : Intent? = result.data
             val action = data?.getIntExtra("action", -1)!!
-            val examName = data.getStringExtra("subject") ?: ""
-            val teacherName = data.getStringExtra("teacher") ?: ""
-            val auditory = data.getIntExtra("auditory", -1)
-            val date = data.getStringExtra("building") ?: ""
-            val time = data.getStringExtra("time") ?: ""
-            val people = data.getIntExtra("dow", -1)
-            val abstract = data.getIntExtra("week_parity", -1)
-            val comment = data.getStringExtra("req_eq") ?: ""
+
             val tempStudent = Student(
-                examName,
-                teacherName,
-                auditory,
-                date,
-                time,
-                people,
-                abstract,
-                comment
+                data.getStringExtra("name") ?: "",
+                data.getIntExtra("number",-1),
+                data.getSerializableExtra("exams") as ArrayList<Exam>,
+                //data.getSerializableExtra("exams", Class<ArrayList<Exam>>)
+                data.getFloatExtra("mean", -1F),
+                data.getBooleanExtra("confirmed", false)
             )
             val tempExamJSON: String = gson.toJson(tempStudent)
 

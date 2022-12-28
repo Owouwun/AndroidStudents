@@ -5,15 +5,15 @@ import androidx.room.TypeConverter
 class GroupOperatorConverter
 {
     @TypeConverter
-    fun fromGO(groups: ArrayList<Group>): String
-    {
+    fun fromGO(groups: ArrayList<Group>): String {
         val resultString: StringBuilder = java.lang.StringBuilder()
         for (i in groups) {
             resultString.append("###${i.name}")
             for (j in i.listOfStudents) {
                 resultString.append("##${j.name}#${j.number}")
-                for (k in j.exams)
-                    resultString.append("#${k.name}?${k.mark}?${k.date}")
+                if (j.exams!=null)
+                    for (k in j.exams!!)
+                        resultString.append("#${k.name}?${k.mark}?${k.date}")
                 resultString.append("#${j.mean}${j.confirmed}")
             }
         }
