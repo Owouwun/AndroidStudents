@@ -30,7 +30,7 @@ class GroupOperator
         return id
     }
 
-    fun getNames(indexGroup: Int): ArrayList<String> {
+    fun getStudentNames(indexGroup: Int): ArrayList<String> {
         val arrayListForReturn: ArrayList<String> = ArrayList()
         if (groups!=null)
             for (i in groups!![indexGroup].students)
@@ -38,7 +38,7 @@ class GroupOperator
         return arrayListForReturn
     }
 
-    fun getNumbers(indexGroup: Int): ArrayList<Int> {
+    fun getStudentNumbers(indexGroup: Int): ArrayList<Int> {
         val arrayListForReturn: ArrayList<Int> = ArrayList()
         if (groups!=null)
             for (i in groups!![indexGroup].students)
@@ -46,7 +46,7 @@ class GroupOperator
         return arrayListForReturn
     }
 
-    fun getMeans(indexGroup: Int) : ArrayList<Float> {
+    fun getStudentMeans(indexGroup: Int) : ArrayList<Float> {
         val arrayListForReturn: ArrayList<Float> = ArrayList()
         if (groups!=null)
             for (i in groups!![indexGroup].students)
@@ -54,8 +54,8 @@ class GroupOperator
         return arrayListForReturn
     }
 
-    fun getStudent(indexGroup: Int, indexExam: Int): Student {
-        return groups!![indexGroup].students[indexExam]
+    fun getStudent(indexGroup: Int, indexStudent: Int): Student {
+        return groups!![indexGroup].students[indexStudent]
     }
 
     fun sortStudents(indexGroup: Int, sortIndex: Int) {

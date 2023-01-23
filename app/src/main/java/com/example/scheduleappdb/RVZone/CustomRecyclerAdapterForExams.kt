@@ -8,9 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.scheduleappdb.R
 import com.example.scheduleappdb.UIZone.group.Exam
 
-class CustomRecyclerAdapterForExams(private val exams: ArrayList<Exam>?):
-    RecyclerView.Adapter<CustomRecyclerAdapterForExams.MyViewHolder>() {
-
+class CustomRecyclerAdapterForExams(private var names: ArrayList<String>?,
+                                    private var marks: ArrayList<Int>?,
+                                    private var dates: ArrayList<String>?
+                                    ): RecyclerView.Adapter<CustomRecyclerAdapterForExams.MyViewHolder>() {
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name_textView: TextView = itemView.findViewById(R.id.rvie_textView_name)
         val mark_textView: TextView = itemView.findViewById(R.id.rvie_textView_mark)
@@ -24,12 +25,12 @@ class CustomRecyclerAdapterForExams(private val exams: ArrayList<Exam>?):
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        if (exams!=null) {
-            holder.name_textView.text = exams[position].name
-            holder.mark_textView.text = exams[position].mark.toString()
-            holder.date_textView.text = exams[position].date
+        if (names!=null) {
+            holder.name_textView.text = names!![position]
+            holder.mark_textView.text = marks!![position].toString()
+            holder.date_textView.text = dates!![position]
         }
     }
 
-    override fun getItemCount() = exams?.size ?: 0
+    override fun getItemCount() = names?.size ?: 0
 }

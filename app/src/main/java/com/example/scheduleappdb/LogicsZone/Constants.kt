@@ -2,7 +2,7 @@ package com.example.scheduleappdb.LogicsZone
 
 class Constants {
     companion object {
-        val serverIP = "78.107.147.202"
+        val serverIP = "192.168.1.71"
         val serverPort = 9876
     }
 

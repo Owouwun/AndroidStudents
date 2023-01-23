@@ -3,24 +3,30 @@ package com.example.scheduleappdb.LogicsZone
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.scheduleappdb.R
 import com.example.scheduleappdb.RVZone.CustomRecyclerAdapterForExams
-import com.example.scheduleappdb.UIZone.group.Exam
-import com.example.scheduleappdb.UIZone.group.Student
+import com.example.scheduleappdb.UIZone.group.*
+import com.google.gson.Gson
 import kotlin.collections.ArrayList
 
-class StudentActivity : AppCompatActivity() {
+class StudentActivity : AppCompatActivity(), ExamDetailsDialogFragment.ExamDetailsDialogListener {
     private lateinit var sa_editText_name: EditText
     private lateinit var sa_editText_number: EditText
     private lateinit var sa_rv_exams: RecyclerView
     private lateinit var sa_textView_mean_value: TextView
     private lateinit var sa_checkBox_confirmed: CheckBox
+
+    private lateinit var curStudent: Student
+    private var currentGroupID: Int = -1
+    private var currentStudentID: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,24 +41,38 @@ class StudentActivity : AppCompatActivity() {
         val action = intent.getIntExtra("action", -1)
 
         findViewById<Button>(R.id.sa_button_ok).setOnClickListener { confirmChanges(action) }
+        findViewById<Button>(R.id.sa_button_addExam).setOnClickListener { addExam() }
 
         if (action == Constants.Action.Editing.toInt) {
-            val tempStudent = Student(
-                intent.getStringExtra("name") ?: "",
-                intent.getIntExtra("number",-1),
-                intent.getSerializableExtra("exams") as ArrayList<Exam>,
-                //data.getSerializableExtra("exams", Class<ArrayList<Exam>>)
-                intent.getFloatExtra("mean", -1F),
-                intent.getBooleanExtra("confirmed", false)
-            )
-            sa_editText_name.setText(tempStudent.name)
-            sa_editText_number.setText(tempStudent.number.toString())
+            val gson = Gson()
+            curStudent = gson.fromJson(intent.getStringExtra("student"), Student::class.java)
+            sa_editText_name.setText(curStudent.name)
+            sa_editText_number.setText(curStudent.number.toString())
+            //adapter = CustomRecyclerAdapterForExams(
+            //    curStudent.exams
+            //)
+            //sa_rv_exams.adapter = adapter
+
             sa_rv_exams.adapter = CustomRecyclerAdapterForExams(
-                tempStudent.exams
+                curStudent.getExamNames(),
+                curStudent.getExamMarks(),
+                curStudent.getExamDates()
             )
-            sa_textView_mean_value.text = tempStudent.mean.toString()
-            sa_checkBox_confirmed.isChecked = tempStudent.confirmed
+
+            sa_textView_mean_value.text = curStudent.mean.toString()
+            sa_checkBox_confirmed.isChecked = curStudent.confirmed
+
+        } else {
+            curStudent = Student(
+                "",
+                -1,
+                null,
+                -1F,
+                false
+            )
         }
+        if (intent.getStringExtra("examName")!=null)
+            sa_textView_mean_value.text = "100"
     }
 
     private fun confirmChanges(action: Int) {
@@ -61,16 +81,87 @@ class StudentActivity : AppCompatActivity() {
                 this@StudentActivity,
                 MainActivity::class.java
             )
+            val gson = Gson()
 
-            intent.putExtra("action", action)
-            intent.putExtra("name", sa_editText_name.text.toString().trim())
-            intent.putExtra("number", sa_editText_number.text.toString().trim())
-            //intent.putExtra("exams", sa_rv_exams.adapter.)
-            //intent.putExtra("mean", aex_ex1_editText_mark.text.toString().toInt())
-            intent.putExtra("confirmed", sa_checkBox_confirmed.isChecked)
+            try {
 
-            setResult(RESULT_OK, intent)
-            finish()
+                intent.putExtra("action", action)
+                intent.putExtra(
+                    "student", gson.toJson(
+                        Student(
+                            sa_editText_name.text.toString().trim(),
+                            sa_editText_number.text.toString().trim().toInt(),
+                            //sa_rv_exams.adapter.toString(),
+                            //curStudent.exams,
+                            null,
+                            if (sa_textView_mean_value.text.toString() == "") -1F
+                            else sa_textView_mean_value.text.toString().toFloat(),
+                            sa_checkBox_confirmed.isChecked
+                        )
+                    )
+                )
+
+                setResult(RESULT_OK, intent)
+                finish()
+            } catch (e : java.lang.Exception) {
+                val toast = Toast.makeText(
+                    applicationContext,
+                    "Номер зачетки должен быть числом!",
+                    Toast.LENGTH_SHORT
+                )
+                toast.show()
+            }
+        } else {
+            val toast = Toast.makeText(
+                applicationContext,
+                "Заполните обязательные поля!",
+                Toast.LENGTH_SHORT
+            )
+            toast.show()
+        }
+    }
+
+    private fun addExam() {
+        val examDetails = ExamDetailsDialogFragment()
+        examDetails.show(supportFragmentManager, "ExamDetailsDialogFragment")
+    }
+
+    override fun ed_button_confirm_listener(dialog: ExamDetailsDialogFragment) {
+        if (dialog.ed_editText_name.text.toString()!="" &&
+            dialog.ed_editText_mark.text.toString()!="" &&
+            dialog.ed_editText_date.text.toString()!="") {
+            //Добавление экзамена в БД нужному студенту
+            try {
+                dialog.ed_editText_mark.text.toString().toFloat()
+                if (curStudent.exams==null) {
+                    val ALE = ArrayList<Exam>()
+                    ALE.add(
+                        Exam(
+                            dialog.ed_editText_name.text.toString(),
+                            dialog.ed_editText_mark.text.toString().toInt(),
+                            dialog.ed_editText_date.text.toString()
+                        )
+                    )
+                    curStudent.exams = ALE
+                } else {
+                    curStudent.exams?.add(
+                        Exam(
+                            dialog.ed_editText_name.text.toString(),
+                            dialog.ed_editText_mark.text.toString().toInt(),
+                            dialog.ed_editText_date.text.toString()
+                        )
+                    )
+                }
+                dialog.dismiss()
+                sa_rv_exams.adapter!!.notifyDataSetChanged()
+            } catch (e : java.lang.Exception) {
+                val toast = Toast.makeText(
+                    applicationContext,
+                    "Номер зачетки должен быть числом!",
+                    Toast.LENGTH_SHORT
+                )
+                toast.show()
+            }
         } else {
             val toast = Toast.makeText(
                 applicationContext,

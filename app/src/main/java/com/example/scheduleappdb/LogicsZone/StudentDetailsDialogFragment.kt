@@ -14,7 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.scheduleappdb.R
 import com.example.scheduleappdb.RVZone.CustomRecyclerAdapterForExams
 import com.example.scheduleappdb.RVZone.CustomRecyclerAdapterForStudents
-import com.example.scheduleappdb.UIZone.group.Exam
+import com.example.scheduleappdb.UIZone.group.*
+import com.google.gson.Gson
 
 class StudentDetailsDialogFragment: androidx.fragment.app.DialogFragment()
 {
@@ -62,13 +63,17 @@ class StudentDetailsDialogFragment: androidx.fragment.app.DialogFragment()
         sd_button_ok.setOnClickListener { returnIdForSort() }
 
         val arguments: Bundle? = arguments
-        sd_textView_name_value.text = arguments!!.getString("studentName") ?: ""
-        sd_textView_number_value.text = arguments.getInt("number", -1).toString()
+        val gson = Gson()
+        val tempStudent : Student = gson.fromJson(arguments!!.getString("student"), Student::class.java)
+        sd_textView_name_value.text = tempStudent.name
+        sd_textView_number_value.text = tempStudent.number.toString()
         sd_rv_exams.adapter = CustomRecyclerAdapterForExams(
-            arguments.getSerializable("exams") as ArrayList<Exam>
+            tempStudent.getExamNames(),
+            tempStudent.getExamMarks(),
+            tempStudent.getExamDates()
         )
-        sd_textView_mean_value.text = arguments.getString("mean") ?: ""
-        sd_textView_confirmed_value
+        sd_textView_mean_value.text = tempStudent.mean.toString()
+        sd_textView_confirmed_value.text = if (tempStudent.confirmed) "Да" else "Нет"
 
         if (arguments.getString("connection") != Constants.ConnectionStage.SuccessfulConnection.toInt.toString()) {
             sd_button_delete.isEnabled = false
@@ -95,6 +100,7 @@ class StudentDetailsDialogFragment: androidx.fragment.app.DialogFragment()
                 VibrationEffect.DEFAULT_AMPLITUDE
             )
         )
+        onInputListenerSortId.sendInputSortId(id)
         return true
     }
 

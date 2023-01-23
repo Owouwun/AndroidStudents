@@ -30,7 +30,7 @@ import java.io.InputStreamReader
 import java.io.PrintWriter
 import java.net.Socket
 
-class MainActivity :AppCompatActivity(),
+class MainActivity: AppCompatActivity(),
     NavigationView.OnNavigationItemSelectedListener,
     StudentDetailsDialogFragment.OnInputListenerSortId {
 
@@ -55,21 +55,6 @@ class MainActivity :AppCompatActivity(),
     private var waitingForUpdate: Boolean = false
 
     private lateinit var binding: MainActivityBinding
-
-    fun putStudent(bundle: Bundle, student: Student) {
-        bundle.putString("studentName", student.name)
-        bundle.putInt("number", student.number)
-        bundle.putSerializable("exams", student.exams)
-        bundle.putFloat("mean", student.mean)
-        bundle.putBoolean("confirmed",student.confirmed)
-    }
-    fun putStudent(intent: Intent, student: Student) {
-        intent.putExtra("studentName", student.name)
-        intent.putExtra("number", student.number)
-        intent.putExtra("exams", student.exams)
-        intent.putExtra("mean", student.mean)
-        intent.putExtra("confirmed",student.confirmed)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,9 +85,12 @@ class MainActivity :AppCompatActivity(),
                         val tempStudent = go.getStudent(currentGroupID, currentStudentID)
                         val bundle = Bundle()
 
-                        putStudent(bundle, tempStudent)
+                        bundle.putString("student",gson.toJson(tempStudent))
+                        bundle.putInt("currentGroupID", currentGroupID)
+                        bundle.putInt("currentStudentID", currentStudentID)
 
                         bundle.putString("connection", connectionStage.toString())
+
                         studentDetails.arguments = bundle
                         studentDetails.show(supportFragmentManager, "MyCustomDialog")
                     }
@@ -110,7 +98,7 @@ class MainActivity :AppCompatActivity(),
                         currentStudentID = position
                         val toast = Toast.makeText(
                             applicationContext,
-                            "Подтвержден: " + go.getStudent(currentGroupID, currentStudentID).confirmed.toString(),
+                            "Подтвержден: " + if (go.getStudent(currentGroupID, currentStudentID).confirmed) "Да" else "Нет",
                             Toast.LENGTH_SHORT
                         )
                         toast.show()
@@ -139,7 +127,7 @@ class MainActivity :AppCompatActivity(),
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        if (currentGroupID != Constants.ConnectionStage.OutOfConnection.toInt)
+        if (currentGroupID == Constants.ConnectionStage.SuccessfulConnection.toInt)
             menu.getItem(0).isVisible = true
         return true
     }
@@ -252,6 +240,7 @@ class MainActivity :AppCompatActivity(),
                     Toast.LENGTH_LONG
                 )
                 toast.show()
+
             }
 
             cm_progressBar.visibility = View.INVISIBLE
@@ -264,9 +253,9 @@ class MainActivity :AppCompatActivity(),
             if (waitingForUpdate || connectionStage == Constants.ConnectionStage.OutOfConnection.toInt) {
                 if (currentGroupID != -1){
                     cm_rv_students.adapter = CustomRecyclerAdapterForStudents(
-                        go.getNames(currentGroupID),
-                        go.getNumbers(currentGroupID),
-                        go.getMeans(currentGroupID)
+                        go.getStudentNames(currentGroupID),
+                        go.getStudentNumbers(currentGroupID),
+                        go.getStudentMeans(currentGroupID)
                     )
                 }
                 waitingForUpdate = false
@@ -289,9 +278,9 @@ class MainActivity :AppCompatActivity(),
         invalidateOptionsMenu()
         currentGroupID = item.itemId
         cm_rv_students.adapter = CustomRecyclerAdapterForStudents(
-            go.getNames(currentGroupID),
-            go.getNumbers(currentGroupID),
-            go.getMeans(currentGroupID)
+            go.getStudentNames(currentGroupID),
+            go.getStudentNumbers(currentGroupID),
+            go.getStudentMeans(currentGroupID)
         )
         cm_rv_students.visibility = View.VISIBLE
         return true
@@ -321,16 +310,17 @@ class MainActivity :AppCompatActivity(),
             val intent = Intent()
             intent.setClass(this, StudentActivity::class.java)
             intent.putExtra("action", Constants.Action.Editing.toInt)
-
-            putStudent(intent, tempStudent)
+            intent.putExtra("currentGroupID", currentGroupID)
+            intent.putExtra("currentStudentID", currentStudentID)
+            intent.putExtra("student",gson.toJson(tempStudent))
 
             setResult(1)
             resultLauncher.launch(intent)
         }
         cm_rv_students.adapter = CustomRecyclerAdapterForStudents(
-            go.getNames(currentGroupID),
-            go.getNumbers(currentGroupID),
-            go.getMeans(currentGroupID)
+            go.getStudentNames(currentGroupID),
+            go.getStudentNumbers(currentGroupID),
+            go.getStudentMeans(currentGroupID)
         )
     }
 
@@ -341,23 +331,28 @@ class MainActivity :AppCompatActivity(),
             val data : Intent? = result.data
             val action = data?.getIntExtra("action", -1)!!
 
-            val tempStudent = Student(
+            //val ALE: ArrayList<Exam>? = (data.getSerializableExtra("exams") as ArrayList<Exam>?)
+            //data.getStringExtra("exams")
+
+            /*val tempStudent = Student(
                 data.getStringExtra("studentName") ?: "",
-                data.getIntExtra("number",-1),
-                data.getSerializableExtra("exams") as ArrayList<Exam>,
+                (data.getStringExtra("number") ?: "-1").toInt(),
+                (data.getSerializableExtra("exams") as ArrayList<Exam>?) ?: null,
                 //data.getParcelableArrayListExtra("exams", Class<Exam>),
                 data.getFloatExtra("mean", -1F),
                 data.getBooleanExtra("confirmed", false)
             )
-            val tempExamJSON: String = gson.toJson(tempStudent)
+
+            val tempStudentJSON: String = gson.toJson(tempStudent)*/
 
             if (action == Constants.Action.Adding.toInt) {
-                val tempStringToSend = "a${go.getGroups()!![currentGroupID].name}##$tempExamJSON"
+                //val tempStringToSend = "a${go.getGroups()!![currentGroupID].name}##$tempStudentJSON"
+                val tempStringToSend = "a${go.getGroups()!![currentGroupID].name}##${data.getStringExtra("student")}"
                 connection.sendDataToServer(tempStringToSend)
                 waitingForUpdate = true
             }
             if (action == Constants.Action.Editing.toInt) {
-                val tempStringToSend = "e$currentGroupID,$currentStudentID##$tempExamJSON"
+                val tempStringToSend = "e$currentGroupID,$currentStudentID##${data.getStringExtra("student")}"
                 connection.sendDataToServer(tempStringToSend)
                 waitingForUpdate = true
             }

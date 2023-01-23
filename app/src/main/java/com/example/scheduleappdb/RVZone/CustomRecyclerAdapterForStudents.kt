@@ -9,9 +9,8 @@ import com.example.scheduleappdb.R
 
 class CustomRecyclerAdapterForStudents(private val names: List<String>,
                                        private val numbers: List<Int>,
-                                       private val means: List<Float>):
-    RecyclerView.Adapter<CustomRecyclerAdapterForStudents.MyViewHolder>()
-{
+                                       private val means: List<Float>
+                                       ): RecyclerView.Adapter<CustomRecyclerAdapterForStudents.MyViewHolder>() {
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name_textView: TextView = itemView.findViewById(R.id.rvis_textView_name)
         val number_textView: TextView = itemView.findViewById(R.id.rvis_textView_number_value)
