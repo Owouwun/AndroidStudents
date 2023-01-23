@@ -123,17 +123,31 @@ class MainActivity: AppCompatActivity(),
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.main, menu)
-        return true
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        if (currentGroupID == Constants.ConnectionStage.SuccessfulConnection.toInt)
-            menu.getItem(0).isVisible = true
+        menu.getItem(0).isVisible=true
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.menu_actionAdd) {
+            if (connectionStage!=Constants.ConnectionStage.SuccessfulConnection.toInt) {
+                val toast = Toast.makeText(
+                    applicationContext,
+                    "Невозможно без поддключения к серверу",
+                    Toast.LENGTH_SHORT
+                )
+                toast.show()
+                return false
+            } else {
+                if (currentGroupID<0) {
+                    val toast = Toast.makeText(
+                        applicationContext,
+                        "Сначала выберите группу",
+                        Toast.LENGTH_SHORT
+                    )
+                    toast.show()
+                    return false
+                }
+            }
             val intent = Intent()
             intent.setClass(this, StudentActivity::class.java)
             intent.putExtra("action", Constants.Action.Adding.toInt)
@@ -240,7 +254,6 @@ class MainActivity: AppCompatActivity(),
                     Toast.LENGTH_LONG
                 )
                 toast.show()
-
             }
 
             cm_progressBar.visibility = View.INVISIBLE
@@ -283,6 +296,7 @@ class MainActivity: AppCompatActivity(),
             go.getStudentMeans(currentGroupID)
         )
         cm_rv_students.visibility = View.VISIBLE
+
         return true
     }
 
@@ -331,22 +345,7 @@ class MainActivity: AppCompatActivity(),
             val data : Intent? = result.data
             val action = data?.getIntExtra("action", -1)!!
 
-            //val ALE: ArrayList<Exam>? = (data.getSerializableExtra("exams") as ArrayList<Exam>?)
-            //data.getStringExtra("exams")
-
-            /*val tempStudent = Student(
-                data.getStringExtra("studentName") ?: "",
-                (data.getStringExtra("number") ?: "-1").toInt(),
-                (data.getSerializableExtra("exams") as ArrayList<Exam>?) ?: null,
-                //data.getParcelableArrayListExtra("exams", Class<Exam>),
-                data.getFloatExtra("mean", -1F),
-                data.getBooleanExtra("confirmed", false)
-            )
-
-            val tempStudentJSON: String = gson.toJson(tempStudent)*/
-
             if (action == Constants.Action.Adding.toInt) {
-                //val tempStringToSend = "a${go.getGroups()!![currentGroupID].name}##$tempStudentJSON"
                 val tempStringToSend = "a${go.getGroups()!![currentGroupID].name}##${data.getStringExtra("student")}"
                 connection.sendDataToServer(tempStringToSend)
                 waitingForUpdate = true
